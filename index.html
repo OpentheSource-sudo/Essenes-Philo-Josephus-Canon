@@ -3,8 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complete Jewish Canon Reconstruction (1st Century CE)</title>
+    <title>Complete Jewish Canon Reconstruction (1st Century CE) - Four-Way Comparison</title>
     <style>
+        /* Base CSS Variables for easy maintenance */
+        :root {
+            --primary-gradient: 135deg, #667eea 0%, #764ba2 100%;
+            --secondary-gradient: 135deg, #1e3c72 0%, #2a5298 100%;
+            --color-essenes: #10b981;
+            --color-philo: #3b82f6;
+            --color-josephus: #8b5cf6;
+            --color-mishnah: #d97706;
+            --color-unanimous: #10b981;
+            --color-partial: #f59e0b;
+            --color-weak: #ef4444;
+            --color-text: #1f2937;
+            --color-muted: #4b5563;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,13 +28,29 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(var(--primary-gradient));
             min-height: 100vh;
             padding: 20px;
         }
 
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 10px;
+            background: var(--color-unanimous);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            z-index: 1000;
+            text-decoration: none;
+        }
+
+        .skip-to-content:focus {
+            top: 10px;
+        }
+
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -28,7 +59,7 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(var(--secondary-gradient));
             color: white;
             padding: 40px;
             text-align: center;
@@ -43,44 +74,57 @@
         .header p {
             font-size: 1.2em;
             opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.5;
         }
 
         .legend {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            padding: 30px;
+            gap: 20px;
+            padding: 25px;
             background: #f8f9fa;
             flex-wrap: wrap;
+            border-bottom: 1px solid #e5e7eb;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            flex: 1;
+            min-width: 200px;
+            max-width: 250px;
         }
 
         .legend-icon {
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             color: white;
+            flex-shrink: 0;
         }
 
-        .icon-essenes { background: #10b981; }
-        .icon-philo { background: #3b82f6; }
-        .icon-josephus { background: #8b5cf6; }
+        .icon-essenes { background: var(--color-essenes); }
+        .icon-philo { background: var(--color-philo); }
+        .icon-josephus { background: var(--color-josephus); }
+        .icon-mishnah { background: var(--color-mishnah); }
 
         .content {
             padding: 40px;
         }
 
         .section {
-            margin-bottom: 40px;
+            margin-bottom: 50px;
         }
 
         .section-title {
@@ -89,93 +133,149 @@
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .book-count {
+            background: #667eea;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: normal;
         }
 
         .table-container {
             overflow-x: auto;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             background: white;
+            min-width: 1000px;
         }
 
         thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(var(--primary-gradient));
             color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         th {
-            padding: 15px;
+            padding: 16px 12px;
             text-align: left;
             font-weight: 600;
             font-size: 0.95em;
+            white-space: nowrap;
         }
 
         td {
-            padding: 12px 15px;
+            padding: 14px 12px;
             border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
         }
 
         tbody tr:hover {
             background: #f3f4f6;
+            transition: background 0.15s ease;
         }
 
         .book-name {
             font-weight: 600;
-            color: #1f2937;
+            color: var(--color-text);
+            position: sticky;
+            left: 0;
+            background: white;
+            z-index: 5;
+            min-width: 150px;
         }
 
-        .status-unanimous {
-            background: #10b981;
-            color: white;
+        .book-name::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: -10px;
+            width: 10px;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0));
+        }
+
+        /* Standardized status badge styling */
+        .status-badge {
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 0.85em;
             font-weight: 600;
             display: inline-block;
+            color: white;
+            transition: transform 0.15s ease;
+            white-space: nowrap;
         }
 
-        .status-partial {
-            background: #f59e0b;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-            display: inline-block;
+        .status-badge:hover {
+            transform: scale(1.05);
         }
 
-        .status-weak {
-            background: #ef4444;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-            display: inline-block;
-        }
+        .status-unanimous { background: var(--color-unanimous); }
+        .status-partial { background: var(--color-partial); }
+        .status-weak { background: var(--color-weak); }
 
         .evidence {
-            font-size: 0.9em;
-            color: #4b5563;
+            font-size: 0.85em;
+            color: var(--color-muted);
+            line-height: 1.4;
         }
 
         .check-yes {
-            color: #10b981;
+            color: var(--color-unanimous);
             font-weight: bold;
         }
 
         .check-no {
-            color: #ef4444;
+            color: var(--color-weak);
+            font-weight: bold;
+        }
+
+        .check-debated {
+            color: var(--color-partial);
             font-weight: bold;
         }
 
         .highlight-row {
             background: #fef3c7 !important;
+        }
+
+        .critical-row {
+            background: #fee2e2 !important;
+        }
+
+        .consensus-summary {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #0ea5e9;
+        }
+
+        .consensus-summary h4 {
+            color: #0369a1;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .consensus-summary p {
+            color: #0c4a6e;
+            line-height: 1.5;
         }
 
         .insights {
@@ -187,28 +287,49 @@
 
         .insights h3 {
             color: #92400e;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .insights ul {
             list-style: none;
             padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
         }
 
         .insights li {
-            padding: 10px 0;
+            padding: 12px 0;
             padding-left: 30px;
             position: relative;
             color: #78350f;
+            line-height: 1.5;
+            background: rgba(255,255,255,0.5);
+            border-radius: 8px;
+            padding: 12px 12px 12px 35px;
         }
 
         .insights li:before {
             content: "→";
             position: absolute;
-            left: 0;
+            left: 12px;
             font-weight: bold;
             color: #92400e;
+        }
+
+        /* Improved responsive behavior */
+        @media (max-width: 1200px) {
+            .legend {
+                gap: 10px;
+            }
+            
+            .legend-item {
+                min-width: 180px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -221,270 +342,346 @@
             }
 
             th, td {
-                padding: 8px;
+                padding: 10px 8px;
                 font-size: 0.85em;
+            }
+
+            .legend {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .legend-item {
+                max-width: 100%;
+                width: 100%;
+            }
+            
+            .insights ul {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
+    <a href="#content" class="skip-to-content">Skip to main content</a>
+
     <div class="container">
         <div class="header">
             <h1>Complete Jewish Canon Reconstruction</h1>
-            <p>1st Century CE: Three-Way Comparison</p>
+            <p>1st Century CE: Four-Way Comparative Analysis<br>
+            <small>Dead Sea Scrolls (Essenes) • Philo (Hellenistic) • Josephus (Roman) • Mishnah (Rabbinic)</small></p>
         </div>
 
         <div class="legend">
             <div class="legend-item">
-                <div class="legend-icon icon-essenes">E</div>
-                <span><strong>Dead Sea Scrolls (Essenes)</strong> - Qumran Community</span>
+                <div class="legend-icon icon-essenes">DSS</div>
+                <div>
+                    <strong>Dead Sea Scrolls</strong><br>
+                    <small>Essene/Qumran community (~150 BCE - 70 CE)</small>
+                </div>
             </div>
             <div class="legend-item">
                 <div class="legend-icon icon-philo">P</div>
-                <span><strong>Philo of Alexandria</strong> - Hellenistic Judaism</span>
+                <div>
+                    <strong>Philo of Alexandria</strong><br>
+                    <small>Hellenistic Jewish philosopher (20 BCE - 50 CE)</small>
+                </div>
             </div>
             <div class="legend-item">
                 <div class="legend-icon icon-josephus">J</div>
-                <span><strong>Josephus</strong> - Jewish Historian in Rome</span>
+                <div>
+                    <strong>Josephus</strong><br>
+                    <small>Jewish historian in Rome (37-100 CE)</small>
+                </div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-icon icon-mishnah">M</div>
+                <div>
+                    <strong>Mishnah</strong><br>
+                    <small>Rabbinic/Pharisaic tradition (compiled ~200 CE)</small>
+                </div>
             </div>
         </div>
 
-        <div class="content">
+        <div class="content" id="content">
             <div class="section">
-                <h2 class="section-title">TORAH (The Law)</h2>
+                <h2 class="section-title">TORAH (The Law) <span class="book-count">5 Books</span></h2>
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th>Book</th>
-                                <th>Dead Sea Scrolls</th>
-                                <th>Philo</th>
-                                <th>Josephus</th>
-                                <th>Status</th>
+                                <th scope="col">Book</th>
+                                <th scope="col">Dead Sea Scrolls</th>
+                                <th scope="col">Philo</th>
+                                <th scope="col">Josephus</th>
+                                <th scope="col">Mishnah</th>
+                                <th scope="col">Consensus Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td class="book-name">Genesis</td>
-                                <td class="evidence"><span class="check-yes">✓✓✓</span> Many copies</td>
+                                <td class="evidence"><span class="check-yes">✓✓✓</span> Multiple complete copies</td>
                                 <td class="evidence"><span class="check-yes">✓✓✓</span> Most cited (~6,000 refs)</td>
                                 <td class="evidence"><span class="check-yes">✓✓✓</span> Extensively (Ant. 1)</td>
-                                <td><span class="status-unanimous">UNANIMOUS</span></td>
+                                <td class="evidence"><span class="check-yes">✓✓✓</span> Extensively cited in Halakhah</td>
+                                <td><span class="status-badge status-unanimous">4/4 UNANIMOUS</span></td>
                             </tr>
                             <tr>
                                 <td class="book-name">Exodus</td>
-                                <td class="evidence"><span class="check-yes">✓✓✓</span> Many copies</td>
-                                <td class="evidence"><span class="check-yes">✓✓✓</span> Second most (~1,800 refs)</td>
+                                <td class="evidence"><span class="check-yes">✓✓✓</span> Multiple complete copies</td>
+                                <td class="evidence"><span class="check-yes">✓✓✓</span> Second most cited (~1,800)</td>
                                 <td class="evidence"><span class="check-yes">✓✓✓</span> Extensively (Ant. 2-3)</td>
-                                <td><span class="status-unanimous">UNANIMOUS</span></td>
+                                <td class="evidence"><span class="check-yes">✓✓✓</span> Core legal source</td>
+                                <td><span class="status-badge status-unanimous">4/4 UNANIMOUS</span></td>
                             </tr>
                             <tr>
                                 <td class="book-name">Leviticus</td>
                                 <td class="evidence"><span class="check-yes">✓✓</span> Multiple copies</td>
                                 <td class="evidence"><span class="check-yes">✓✓</span> Substantially cited</td>
                                 <td class="evidence"><span class="check-yes">✓✓</span> Extensively (Ant. 3)</td>
-                                <td><span class="status-unanimous">UNANIMOUS</span></td>
+                                <td class="evidence"><span class="check-yes">✓✓✓</span> Key for Temple ritual laws</td>
+                                <td><span class="status-badge status-unanimous">4/4 UNANIMOUS</span></td>
                             </tr>
                             <tr>
                                 <td class="book-name">Numbers</td>
                                 <td class="evidence"><span class="check-yes">✓✓</span> Multiple copies</td>
                                 <td class="evidence"><span class="check-yes">✓✓</span> Substantially cited</td>
                                 <td class="evidence"><span class="check-yes">✓✓</span> Extensively (Ant. 4)</td>
-                                <td><span class="status-unanimous">UNANIMOUS</span></td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Cited for laws and narratives</td>
+                                <td><span class="status-badge status-unanimous">4/4 UNANIMOUS</span></td>
                             </tr>
                             <tr>
                                 <td class="book-name">Deuteronomy</td>
                                 <td class="evidence"><span class="check-yes">✓✓✓</span> Many copies</td>
                                 <td class="evidence"><span class="check-yes">✓✓</span> Substantially cited</td>
                                 <td class="evidence"><span class="check-yes">✓✓</span> Extensively (Ant. 4)</td>
-                                <td><span class="status-unanimous">UNANIMOUS</span></td>
+                                <td class="evidence"><span class="check-yes">✓✓✓</span> Key legal source, Shema liturgy</td>
+                                <td><span class="status-badge status-unanimous">4/4 UNANIMOUS</span></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                
+                <div class="consensus-summary">
+                    <h4>📜 Torah Consensus</h4>
+                    <p>The Pentateuch shows perfect 4/4 agreement across all Jewish groups. All communities accepted the divine authority of the five books of Moses, establishing the Torah as the unshakable foundation of 1st century Judaism.</p>
+                </div>
             </div>
 
             <div class="section">
-                <h2 class="section-title">PROPHETS (Former & Latter)</h2>
+                <h2 class="section-title">PROPHETS (Former & Latter) <span class="book-count">8 Books*</span></h2>
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th>Book</th>
-                                <th>Dead Sea Scrolls</th>
-                                <th>Philo</th>
-                                <th>Josephus</th>
-                                <th>Status</th>
+                                <th scope="col">Book</th>
+                                <th scope="col">Dead Sea Scrolls</th>
+                                <th scope="col">Philo</th>
+                                <th scope="col">Josephus</th>
+                                <th scope="col">Mishnah</th>
+                                <th scope="col">Consensus Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td class="book-name">Joshua</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> Found</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Verified copies</td>
                                 <td class="evidence"><span class="check-yes">✓</span> Rarely cited</td>
                                 <td class="evidence"><span class="check-yes">✓✓</span> Yes (Ant. 5)</td>
-                                <td><span class="status-unanimous">UNANIMOUS</span></td>
+                                <td class="evidence"><span class="check-yes">✓</span> Cited in legal discussions</td>
+                                <td><span class="status-badge status-unanimous">4/4 UNANIMOUS</span></td>
                             </tr>
                             <tr>
                                 <td class="book-name">Judges</td>
-                                <td class="evidence"><span class="check-yes">✓</span> Found</td>
+                                <td class="evidence"><span class="check-yes">✓</span> Verified copies</td>
                                 <td class="evidence"><span class="check-yes">✓</span> Rarely cited</td>
                                 <td class="evidence"><span class="check-yes">✓✓</span> Yes (Ant. 5)</td>
-                                <td><span class="status-unanimous">UNANIMOUS</span></td>
+                                <td class="evidence"><span class="check-yes">✓</span> Cited for historical precedents</td>
+                                <td><span class="status-badge status-unanimous">4/4 UNANIMOUS</span></td>
                             </tr>
                             <tr>
-                                <td class="book-name">1-2 Samuel</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> Found</td>
+                                <td class="book-name">Samuel (1-2)</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Verified copies</td>
                                 <td class="evidence"><span class="check-yes">✓</span> Few citations</td>
                                 <td class="evidence"><span class="check-yes">✓✓</span> Yes (Ant. 6-7)</td>
-                                <td><span class="status-unanimous">UNANIMOUS</span></td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Cited for kingship laws</td>
+                                <td><span class="status-badge status-unanimous">4/4 UNANIMOUS</span></td>
                             </tr>
                             <tr>
-                                <td class="book-name">1-2 Kings</td>
-                                <td class="evidence"><span class="check-yes">✓</span> Found</td>
+                                <td class="book-name">Kings (1-2)</td>
+                                <td class="evidence"><span class="check-yes">✓</span> Verified copies</td>
                                 <td class="evidence"><span class="check-yes">✓</span> Some citations</td>
                                 <td class="evidence"><span class="check-yes">✓✓</span> Yes (Ant. 8-10)</td>
-                                <td><span class="status-unanimous">UNANIMOUS</span></td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Cited for Temple history</td>
+                                <td><span class="status-badge status-unanimous">4/4 UNANIMOUS</span></td>
                             </tr>
                             <tr>
                                 <td class="book-name">Isaiah</td>
-                                <td class="evidence"><span class="check-yes">✓✓✓</span> Many copies (22+)</td>
+                                <td class="evidence"><span class="check-yes">✓✓✓</span> 22+ copies</td>
                                 <td class="evidence"><span class="check-yes">✓✓</span> Moderately (25 refs)</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> Yes (Ant. 10)</td>
-                                <td><span class="status-unanimous">UNANIMOUS</span></td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Explicitly recognized</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Cited in eschatology</td>
+                                <td><span class="status-badge status-unanimous">4/4 UNANIMOUS</span></td>
                             </tr>
                             <tr>
                                 <td class="book-name">Jeremiah</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> Found (6 copies)</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> 6 copies</td>
                                 <td class="evidence"><span class="check-yes">✓</span> Some (21 refs)</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> Yes (Ant. 10)</td>
-                                <td><span class="status-unanimous">UNANIMOUS</span></td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Explicitly recognized</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Cited for Temple destruction</td>
+                                <td><span class="status-badge status-unanimous">4/4 UNANIMOUS</span></td>
                             </tr>
                             <tr>
                                 <td class="book-name">Ezekiel</td>
-                                <td class="evidence"><span class="check-yes">✓</span> Found (6 copies)</td>
+                                <td class="evidence"><span class="check-yes">✓</span> 6 copies</td>
                                 <td class="evidence"><span class="check-yes">✓</span> Minimal (7 refs)</td>
-                                <td class="evidence"><span class="check-yes">✓</span> Yes (Ant. 10)</td>
-                                <td><span class="status-unanimous">UNANIMOUS</span></td>
+                                <td class="evidence"><span class="check-yes">✓</span> Explicitly recognized</td>
+                                <td class="evidence"><span class="check-yes">✓</span> Temple vision debated</td>
+                                <td><span class="status-badge status-unanimous">4/4 UNANIMOUS</span></td>
                             </tr>
                             <tr>
-                                <td class="book-name">The Twelve (Minor Prophets)</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> All found</td>
-                                <td class="evidence"><span class="check-yes">✓</span> Few citations</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> Yes, all mentioned</td>
-                                <td><span class="status-partial">2-3 of 3</span></td>
+                                <td class="book-name">The Twelve<br><small>(Minor Prophets)</small></td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> All 12 books</td>
+                                <td class="evidence"><span class="check-yes">✓</span> Cites select prophets</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Recognizes collection</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Various citations</td>
+                                <td><span class="status-badge status-unanimous">4/4 UNANIMOUS</span></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                
+                <div class="consensus-summary">
+                    <h4>📖 Prophets Consensus</h4>
+                    <p>The Prophets (Nevi'im) show remarkable 4/4 agreement across traditions. All eight prophetic books* were universally recognized as authoritative. The Minor Prophets were treated as a single collection in some traditions.</p>
+                </div>
             </div>
 
             <div class="section">
-                <h2 class="section-title">WRITINGS (Ketuvim)</h2>
+                <h2 class="section-title">WRITINGS (Ketuvim) <span class="book-count">11 Books</span></h2>
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th>Book</th>
-                                <th>Dead Sea Scrolls</th>
-                                <th>Philo</th>
-                                <th>Josephus</th>
-                                <th>Status</th>
+                                <th scope="col">Book</th>
+                                <th scope="col">Dead Sea Scrolls</th>
+                                <th scope="col">Philo</th>
+                                <th scope="col">Josephus</th>
+                                <th scope="col">Mishnah</th>
+                                <th scope="col">Consensus Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td class="book-name">Psalms</td>
-                                <td class="evidence"><span class="check-yes">✓✓✓</span> Most copies (39+)</td>
-                                <td class="evidence"><span class="check-yes">✓✓✓</span> Third most (~600 refs)</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> Yes (mentioned)</td>
-                                <td><span class="status-unanimous">UNANIMOUS</span></td>
+                                <td class="evidence"><span class="check-yes">✓✓✓</span> 39+ copies</td>
+                                <td class="evidence"><span class="check-yes">✓✓✓</span> Third most cited</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Explicitly listed</td>
+                                <td class="evidence"><span class="check-yes">✓✓✓</span> Liturgical use established</td>
+                                <td><span class="status-badge status-unanimous">4/4 UNANIMOUS</span></td>
+                            </tr>
+                            <tr>
+                                <td class="book-name">Proverbs</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Verified copies</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> 27 citations</td>
+                                <td class="evidence"><span class="check-yes">✓</span> Implied in "4 books"</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Cited for wisdom</td>
+                                <td><span class="status-badge status-partial">3/4 STRONG</span></td>
                             </tr>
                             <tr class="highlight-row">
                                 <td class="book-name">Job</td>
                                 <td class="evidence"><span class="check-yes">✓✓</span> Found + Targum</td>
-                                <td class="evidence"><span class="check-yes">✓</span> Cited/alluded</td>
-                                <td class="evidence"><span class="check-no">✗</span> Never named</td>
-                                <td><span class="status-partial">2 of 3 EXPLICIT</span></td>
+                                <td class="evidence"><span class="check-yes">✓</span> Cited and alluded</td>
+                                <td class="evidence"><span class="check-no">✗</span> Never explicitly named</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Cited, debates on authorship</td>
+                                <td><span class="status-badge status-partial">3/4 STRONG</span></td>
                             </tr>
                             <tr>
-                                <td class="book-name">Proverbs</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> Found</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> Cited (27 refs)</td>
-                                <td class="evidence"><span class="check-yes">✓</span> Implied in "4 books"</td>
-                                <td><span class="status-unanimous">UNANIMOUS</span></td>
+                                <td class="book-name">Song of Songs</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> 4 copies</td>
+                                <td class="evidence"><span class="check-no">✗</span> Never cited</td>
+                                <td class="evidence"><span class="check-no">✗</span> Never named</td>
+                                <td class="evidence"><span class="check-debated">⚠</span> Debated (Yadayim 3:5)</td>
+                                <td><span class="status-badge status-weak">2/4 WEAK</span></td>
                             </tr>
                             <tr>
                                 <td class="book-name">Ruth</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> Found (4 copies)</td>
-                                <td class="evidence"><span class="check-no">✗</span> Never cited</td>
-                                <td class="evidence"><span class="check-yes">✓</span> Yes (Ant. 5)</td>
-                                <td><span class="status-partial">2 of 3</span></td>
-                            </tr>
-                            <tr class="highlight-row">
-                                <td class="book-name">Song of Songs</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> Found (4 copies)</td>
-                                <td class="evidence"><span class="check-no">✗</span> Never cited</td>
-                                <td class="evidence"><span class="check-no">✗</span> Never named</td>
-                                <td><span class="status-weak">1 of 3 EXPLICIT</span></td>
-                            </tr>
-                            <tr>
-                                <td class="book-name">Ecclesiastes</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> Found (3 copies)</td>
-                                <td class="evidence"><span class="check-no">✗</span> Almost never (2)</td>
-                                <td class="evidence"><span class="check-yes">✓?</span> Possibly in "4 books"</td>
-                                <td><span class="status-partial">2 of 3</span></td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> 4 copies</td>
+                                <td class="evidence"><span class="check-no">✗</span> No citations</td>
+                                <td class="evidence"><span class="check-yes">✓</span> Covered in Ant. 5</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Read at Shavuot</td>
+                                <td><span class="status-badge status-partial">3/4 STRONG</span></td>
                             </tr>
                             <tr>
                                 <td class="book-name">Lamentations</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> Found (4 copies)</td>
-                                <td class="evidence"><span class="check-no">✗</span> Never cited</td>
-                                <td class="evidence"><span class="check-yes">✓</span> Yes (with Jeremiah)</td>
-                                <td><span class="status-partial">2 of 3</span></td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> 4 copies</td>
+                                <td class="evidence"><span class="check-no">✗</span> No citations</td>
+                                <td class="evidence"><span class="check-yes">✓</span> Linked to Jeremiah</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Read on Tisha B'Av</td>
+                                <td><span class="status-badge status-partial">3/4 STRONG</span></td>
                             </tr>
-                            <tr class="highlight-row">
+                            <tr>
+                                <td class="book-name">Ecclesiastes</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> 3 copies</td>
+                                <td class="evidence"><span class="check-no">✗</span> Only 2 allusions</td>
+                                <td class="evidence"><span class="check-yes">✓?</span> Possibly grouped</td>
+                                <td class="evidence"><span class="check-debated">⚠</span> Debated (Yadayim 3:5)</td>
+                                <td><span class="status-badge status-weak">2/4 WEAK</span></td>
+                            </tr>
+                            <tr class="critical-row">
                                 <td class="book-name">Esther</td>
-                                <td class="evidence"><span class="check-no">✗</span> NOT FOUND (only missing)</td>
-                                <td class="evidence"><span class="check-no">✗</span> Never cited</td>
+                                <td class="evidence"><span class="check-no">✗</span> Only OT book missing</td>
+                                <td class="evidence"><span class="check-no">✗</span> No citations</td>
                                 <td class="evidence"><span class="check-yes">✓✓✓</span> Extensively (Ant. 11.6)</td>
-                                <td><span class="status-weak">1 of 3 EXPLICIT</span></td>
+                                <td class="evidence"><span class="check-debated">⚠</span> Debated (Megillah 7a)</td>
+                                <td><span class="status-badge status-weak">2/4 WEAK</span></td>
                             </tr>
                             <tr>
                                 <td class="book-name">Daniel</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> Found (8 copies)</td>
-                                <td class="evidence"><span class="check-no">✗</span> Almost never (1?)</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> Yes (Ant. 10)</td>
-                                <td><span class="status-partial">2 of 3</span></td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> 8 copies</td>
+                                <td class="evidence"><span class="check-no">✗</span> At most 1 allusion</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Explicitly recognized</td>
+                                <td class="evidence"><span class="check-yes">✓</span> Cited, but not in Prophets</td>
+                                <td><span class="status-badge status-partial">3/4 STRONG</span></td>
                             </tr>
                             <tr>
                                 <td class="book-name">Ezra-Nehemiah</td>
-                                <td class="evidence"><span class="check-yes">✓</span> Found</td>
-                                <td class="evidence"><span class="check-no">✗</span> Never cited</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> Yes (Ant. 11)</td>
-                                <td><span class="status-partial">2 of 3</span></td>
+                                <td class="evidence"><span class="check-yes">✓</span> Verified copies</td>
+                                <td class="evidence"><span class="check-no">✗</span> No citations</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Covered in Ant. 11</td>
+                                <td class="evidence"><span class="check-yes">✓</span> Cited for Second Temple</td>
+                                <td><span class="status-badge status-partial">3/4 STRONG</span></td>
                             </tr>
                             <tr>
-                                <td class="book-name">1-2 Chronicles</td>
-                                <td class="evidence"><span class="check-yes">✓</span> Found</td>
-                                <td class="evidence"><span class="check-yes">✓</span> Rarely cited</td>
-                                <td class="evidence"><span class="check-yes">✓✓</span> Yes (Ant. 7-11)</td>
-                                <td><span class="status-unanimous">UNANIMOUS</span></td>
+                                <td class="book-name">Chronicles (1-2)</td>
+                                <td class="evidence"><span class="check-yes">✓</span> Verified copies</td>
+                                <td class="evidence"><span class="check-yes">✓</span> Rare citations</td>
+                                <td class="evidence"><span class="check-yes">✓✓</span> Covered in Ant. 7-11</td>
+                                <td class="evidence"><span class="check-yes">✓</span> Cited as historical source</td>
+                                <td><span class="status-badge status-unanimous">4/4 UNANIMOUS</span></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                
+                <div class="consensus-summary">
+                    <h4>📚 Writings Consensus</h4>
+                    <p>The Writings show the most variation. Psalms and Chronicles have 4/4 agreement. Esther, Song of Songs, and Ecclesiastes were debated even in Rabbinic circles. The Mishnah confirms that debates about "defiling the hands" (canonicity) existed for these three books.</p>
+                </div>
             </div>
 
             <div class="insights">
-                <h3>🔍 Key Insights from the Three-Way Comparison</h3>
+                <h3>🔍 Key Insights from Four-Way Comparison</h3>
                 <ul>
-                    <li><strong>Job is CONFIRMED:</strong> Found in Dead Sea Scrolls (with complete Targum) + cited by Philo = 2 of 3 explicit confirmations</li>
-                    <li><strong>Esther paradox:</strong> Only Josephus mentions it; completely absent from Qumran (only OT book not found) and never cited by Philo</li>
-                    <li><strong>Song of Songs paradox:</strong> Found at Qumran but never mentioned by Philo or Josephus</li>
-                    <li><strong>The core is unanimous:</strong> Torah, Major Prophets, Psalms, and Proverbs confirmed by all three sources</li>
-                    <li><strong>Different emphases, same canon:</strong> Each community had different purposes but recognized the same 22/24 book collection</li>
-                    <li><strong>Silence ≠ rejection:</strong> Philo's philosophical focus and Josephus's historical approach explain their selective citations</li>
-                    <li><strong>Your reconstruction method works:</strong> Combining all three sources gives us the complete 1st century Jewish canon!</li>
+                    <li><strong>The Mishnah confirms the "disputed three"</strong>: Yadayim 3:5 explicitly debates whether Song of Songs and Ecclesiastes "defile the hands" (i.e., are canonical).</li>
+                    <li><strong>Esther's unique position</strong>: Missing from Qumran, unmentioned by Philo, but extensively covered by Josephus and liturgically established in Mishnah (Megillah).</li>
+                    <li><strong>Perfect Torah consensus</strong>: All four traditions show absolute agreement on the Pentateuch as the foundation of Judaism.</li>
+                    <li><strong>Prophets universally accepted</strong>: Despite different emphases, all prophetic books were recognized by all Jewish groups in the 1st century.</li>
+                    <li><strong>Hellenistic selectivity</strong>: Philo's philosophical focus explains his neglect of historical books like Esther and Ruth.</li>
+                    <li><strong>Qumran's Esther omission</strong>: Likely theological (opposition to Purim's non-Mosaic origin) rather than canonical rejection.</li>
+                    <li><strong>Josephus' 22-book canon</strong>: Matches the Mishnaic tradition when counting combined books (e.g., 12 Minor Prophets as one).</li>
+                    <li><strong>Rabbinic consolidation</strong>: The Mishnah represents the emerging consensus that would become the Masoretic Text canon.</li>
                 </ul>
             </div>
         </div>
